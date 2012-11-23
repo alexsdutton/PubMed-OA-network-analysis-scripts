@@ -532,15 +532,7 @@
     <xsl:variable name="prev" select="preceding-sibling::node()[position()&lt;3]"/>
     <xsl:variable name="next" select="following-sibling::node()[position()&lt;3]"/>
     <xsl:variable name="seps" select="('-', '&#x2013;')"/>
-    <xsl:if test="not($prev[2] and name($prev[1])='xref' and $prev[1]/@ref-type='bibr')">
-      <node type="in-text-reference-pointer" id="{$id}:in-text-reference-pointer:{generate-id()}">
-      <xsl:call-template name="parse-xref">
-        <xsl:with-param name="prev" select="$prev"/>
-        <xsl:with-param name="next" select="$next"/>
-      </xsl:call-template>
-    </xsl:if>
-  </xsl:template>
-  <xsl:template name="parse-xref">
+    <xsl:if test="not($prev[2] and index-of($seps, $prev[2]) and name($prev[1])='xref' and $prev[1]/@ref-type='bibr')">
       <node type="in-text-reference-pointer" id="{$id}:in-text-reference-pointer:{generate-id()}">
         <data key="paragraph">
           <xsl:value-of select="count(preceding::p[ancestor::body])+1"/>
@@ -580,6 +572,7 @@
           </xsl:otherwise>
         </xsl:choose>
       </node>
+    </xsl:if>
   </xsl:template>
   <xsl:template match="node()">
     <xsl:param name="id"/>
